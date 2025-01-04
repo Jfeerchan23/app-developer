@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonInput, IonCard, IonCardContent, IonCol, IonGrid, IonRow } from '@ionic/angular/standalone';
 import { IonButton } from '@ionic/angular/standalone';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
 export interface element {
   color: string;  // El color en formato hexadecimal, RGB, o nombre del color
   value: number;  // El valor asociado al color
@@ -30,12 +32,21 @@ export class HomePage {
   num: number = 0;           // Número ingresado por el usuario
   list: element[] = [];      // Lista de elementos con colores
 
-  constructor() {}
+  constructor(private firestore: AngularFirestore) {}
+
 
   // Método principal para mostrar los números y calcular los múltiplos
   showNumbers(): void {
     const result: Result = this.generateElementsAndCalculate(this.num);
     console.log(result); // Resultado final para Firebase u otras operaciones
+    this.firestore.collection('records').add(result)
+    .then(() => {
+      console.log('Registro agregado correctamente');
+    })
+    .catch((error) => {
+      console.error('Error al agregar el número:', error);
+    });
+
   }
 
   private generateElementsAndCalculate(limit: number): Result {
