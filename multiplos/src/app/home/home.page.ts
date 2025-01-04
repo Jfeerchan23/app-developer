@@ -12,7 +12,7 @@ export interface element {
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonContent, IonInput, IonInput, IonItem, IonButton, IonHeader,IonToolbar,IonTitle,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, FormsModule, CommonModule , IonCol, IonGrid, IonRow],
+  imports: [IonContent, IonInput, IonInput, IonButton, IonCard, IonCardContent, FormsModule, CommonModule, IonCol, IonGrid, IonRow],
 })
 
 export class HomePage {
