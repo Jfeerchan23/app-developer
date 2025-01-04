@@ -10,11 +10,7 @@ export interface element {
 export interface Result {
   number: number; // El número ingresado por el usuario
   numbers: number[]; // Todos los números hasta el ingresado
-  multiples: {
-    multipleOf3: number[];  // Múltiplos de 3
-    multipleOf5: number[];  // Múltiplos de 5
-    multipleOf7: number[];  // Múltiplos de 7
-  };
+  multiples: {};
 }
 
 @Component({
@@ -31,7 +27,7 @@ export class HomePage {
   num: number = 0;           // Número ingresado por el usuario
   list: element[] = [];      // Lista de elementos con colores
 
-  constructor() {}
+  constructor() { }
 
   showNumbers(): void {
     const result: Result = this.generateElementsAndCalculate(this.num);
@@ -40,30 +36,33 @@ export class HomePage {
 
   private generateElementsAndCalculate(limit: number): Result {
     const elements: element[] = [];
-    const multiples: { [key: number]: number[] } = { 3: [], 5: [], 7: [] };
-  
+    const multiples: { [key: number]: number[] } = {};
+
+    // Inicializar los múltiplos para cada divisor estático
+    for (const divisor of HomePage.DIVISORS) {
+      multiples[divisor] = [];
+    }
+
     for (let i = 0; i <= limit; i++) {
       // Agregar el número a sus respectivos múltiplos
       this.addMultiples(i, multiples);
-  
+
       // Determinar el color basado en la prioridad de divisores
       const color = this.getColorByPriority(i);
       elements.push({ value: i, color });
     }
-  
+
     this.list = elements;
-  
+
+    console.log(multiples);
+
     return {
       number: limit,
       numbers: elements.map((el) => el.value),
-      multiples: {
-        multipleOf3: multiples[3],
-        multipleOf5: multiples[5],
-        multipleOf7: multiples[7],
-      },
+      multiples: multiples,
     };
   }
-  
+
   // Agrega el número a las listas de múltiplos correspondientes
   private addMultiples(num: number, multiples: { [key: number]: number[] }): void {
     for (const divisor of HomePage.DIVISORS) {
@@ -72,20 +71,20 @@ export class HomePage {
       }
     }
   }
-  
+
   // Determina el color basado en la prioridad de divisores (más bajo primero)
   private getColorByPriority(num: number): string {
     if (num === 0) return 'black';
-  
+
     const colorMap: { [key: number]: string } = HomePage.COLORS;
-  
+
     for (const divisor of HomePage.DIVISORS) {
       if (num % divisor === 0) {
         return colorMap[divisor]; // Retorna el color del divisor más pequeño
       }
     }
-  
+
     return 'black'; // Si no es múltiplo de ninguno, el color es negro
   }
-  
+
 }  
