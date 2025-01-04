@@ -10,25 +10,29 @@ export interface element {
 export interface Result {
   number: number; // El número ingresado por el usuario
   numbers: number[]; // Todos los números hasta el ingresado
-  multiples: {};
+  multiples: { [key: number]: number[] }; // Múltiplos por divisor
 }
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonContent, IonInput, IonInput, IonButton, IonCard, IonCardContent, FormsModule, CommonModule, IonCol, IonGrid, IonRow],
+  imports: [IonContent, IonInput, IonButton, IonCard, IonCardContent, FormsModule, CommonModule, IonCol, IonGrid, IonRow],
 })
-
 export class HomePage {
-  static readonly DIVISORS = [3, 5, 7];
-  static readonly COLORS = { 3: 'green', 5: 'red', 7: 'blue' };
+  // Configuración flexible para los divisores y sus colores
+  divisors: { [key: number]: string } = {
+    3: 'green',
+    5: 'red',
+    7: 'blue',
+  };
 
   num: number = 0;           // Número ingresado por el usuario
   list: element[] = [];      // Lista de elementos con colores
 
-  constructor() { }
+  constructor() {}
 
+  // Método principal para mostrar los números y calcular los múltiplos
   showNumbers(): void {
     const result: Result = this.generateElementsAndCalculate(this.num);
     console.log(result); // Resultado final para Firebase u otras operaciones
@@ -36,55 +40,64 @@ export class HomePage {
 
   private generateElementsAndCalculate(limit: number): Result {
     const elements: element[] = [];
-    const multiples: { [key: number]: number[] } = {};
-
-    // Inicializar los múltiplos para cada divisor estático
-    for (const divisor of HomePage.DIVISORS) {
-      multiples[divisor] = [];
-    }
-
+    // Asegúrate de que las claves sean números (no cadenas) y que los valores sean arrays de números
+    const multiples: { [key: number]: number[] } = this.initializeMultiples();
+  
     for (let i = 0; i <= limit; i++) {
-      // Agregar el número a sus respectivos múltiplos
-      this.addMultiples(i, multiples);
-
-      // Determinar el color basado en la prioridad de divisores
-      const color = this.getColorByPriority(i);
+      this.addMultiples(i, multiples); // Agregar los múltiplos para cada número
+      const color = this.getColorByPriority(i); // Obtener color basado en la prioridad de divisores
       elements.push({ value: i, color });
     }
-
+  
     this.list = elements;
-
-    console.log(multiples);
-
-    return {
-      number: limit,
-      numbers: elements.map((el) => el.value),
-      multiples: multiples,
-    };
+    return this.createResult(limit, elements, multiples); // Crear el resultado final
   }
+  
 
-  // Agrega el número a las listas de múltiplos correspondientes
+// Inicializa un objeto con las claves de los divisores
+private initializeMultiples(): { [key: number]: number[] } {
+  return Object.keys(this.divisors).reduce((acc, divisor) => {
+    const divisorNumber = parseInt(divisor); // Convertir la clave a número
+    acc[divisorNumber] = []; // Usar divisorNumber como índice
+    return acc;
+  }, {} as { [key: number]: number[] });
+}
+
+
   private addMultiples(num: number, multiples: { [key: number]: number[] }): void {
-    for (const divisor of HomePage.DIVISORS) {
-      if (num % divisor === 0 && num !== 0) {
-        multiples[divisor].push(num);
+    // Convertir divisor a número para evitar problemas de tipos
+    Object.keys(this.divisors).forEach((divisor) => {
+      const divisorNumber = parseInt(divisor); // Convertir la clave a número
+      if (num % divisorNumber === 0 && num !== 0) {
+        if (!multiples[divisorNumber]) {
+          multiples[divisorNumber] = []; // Inicializar el array si no existe
+        }
+        multiples[divisorNumber].push(num);
       }
-    }
+    });
   }
+  
 
   // Determina el color basado en la prioridad de divisores (más bajo primero)
   private getColorByPriority(num: number): string {
     if (num === 0) return 'black';
 
-    const colorMap: { [key: number]: string } = HomePage.COLORS;
-
-    for (const divisor of HomePage.DIVISORS) {
-      if (num % divisor === 0) {
-        return colorMap[divisor]; // Retorna el color del divisor más pequeño
+    // Devuelve el color del divisor más pequeño que divide el número
+    for (const divisor in this.divisors) {
+      if (num % parseInt(divisor) === 0) {
+        return this.divisors[divisor];
       }
     }
 
     return 'black'; // Si no es múltiplo de ninguno, el color es negro
   }
 
-}  
+  // Genera el objeto final de resultado con los números y sus múltiplos
+  private createResult(limit: number, elements: element[], multiples: { [key: number]: number[] }): Result {
+    return {
+      number: limit,
+      numbers: elements.map((el) => el.value),
+      multiples: multiples,
+    };
+  }
+}
