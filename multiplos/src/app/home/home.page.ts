@@ -7,6 +7,15 @@ export interface element {
   color: string;  // El color en formato hexadecimal, RGB, o nombre del color
   value: number;  // El valor asociado al color
 }
+export interface Result {
+  number: number; // El número ingresado por el usuario
+  numbers: number[]; // Todos los números hasta el ingresado
+  multiples: {
+    multipleOf3: number[];  // Múltiplos de 3
+    multipleOf5: number[];  // Múltiplos de 5
+    multipleOf7: number[];  // Múltiplos de 7
+  };
+}
 
 @Component({
   selector: 'app-home',
@@ -16,40 +25,67 @@ export interface element {
 })
 
 export class HomePage {
+  static readonly DIVISORS = [3, 5, 7];
+  static readonly COLORS = { 3: 'green', 5: 'red', 7: 'blue' };
 
-  num: number = 0; // Propiedad para almacenar el número ingresado
-  list: element[] = [];
+  num: number = 0;           // Número ingresado por el usuario
+  list: element[] = [];      // Lista de elementos con colores
 
   constructor() {}
 
-  showNumbers(){
-  this.list = [];
-    for (let i = 0; i <= this.num; i++) {
-      this.list.push({ color: this.getColor(i), value: i })
-    }
+  showNumbers(): void {
+    const result: Result = this.generateElementsAndCalculate(this.num);
+    console.log(result); // Resultado final para Firebase u otras operaciones
   }
 
-  getColor(num: number): string {
-    const colorMap: { [key: number]: string } = {
-      3: 'green',  // Múltiplo de 3
-      5: 'red',    // Múltiplo de 5
-      7: 'blue'    // Múltiplo de 7
-    };
+  private generateElementsAndCalculate(limit: number): Result {
+    const elements: element[] = [];
+    const multiples: { [key: number]: number[] } = { 3: [], 5: [], 7: [] };
   
-    // Si el número es 0, se devuelve negro
-    if (num === 0) {
-      return 'black';
+    for (let i = 0; i <= limit; i++) {
+      // Agregar el número a sus respectivos múltiplos
+      this.addMultiples(i, multiples);
+  
+      // Determinar el color basado en la prioridad de divisores
+      const color = this.getColorByPriority(i);
+      elements.push({ value: i, color });
     }
   
-    // Recorremos los múltiplos posibles (3, 5, 7)
-    for (let divisor of [3, 5, 7]) {
+    this.list = elements;
+  
+    return {
+      number: limit,
+      numbers: elements.map((el) => el.value),
+      multiples: {
+        multipleOf3: multiples[3],
+        multipleOf5: multiples[5],
+        multipleOf7: multiples[7],
+      },
+    };
+  }
+  
+  // Agrega el número a las listas de múltiplos correspondientes
+  private addMultiples(num: number, multiples: { [key: number]: number[] }): void {
+    for (const divisor of HomePage.DIVISORS) {
+      if (num % divisor === 0 && num !== 0) {
+        multiples[divisor].push(num);
+      }
+    }
+  }
+  
+  // Determina el color basado en la prioridad de divisores (más bajo primero)
+  private getColorByPriority(num: number): string {
+    if (num === 0) return 'black';
+  
+    const colorMap: { [key: number]: string } = HomePage.COLORS;
+  
+    for (const divisor of HomePage.DIVISORS) {
       if (num % divisor === 0) {
-        return colorMap[divisor];  // Devolvemos el color correspondiente
+        return colorMap[divisor]; // Retorna el color del divisor más pequeño
       }
     }
   
-    // Si no es múltiplo de 3, 5 ni 7, devolvemos negro
-    return 'black';
+    return 'black'; // Si no es múltiplo de ninguno, el color es negro
   }
   
-}
+}  
