@@ -10,13 +10,13 @@ jobs:
       # Paso 1: Hacer checkout del código
       - uses: actions/checkout@v4
 
-      # Paso 2: Cambiar al directorio 'multiplos'
-      - run: cd multiplos
+      # Paso 2: Cambiar al directorio 'multiplos' y ejecutar comandos
+      - run: |
+          cd multiplos
+          npm ci
+          npm run build
 
-      # Paso 3: Instalar dependencias y hacer build
-      - run: npm install && npm run build
-
-      # Paso 4: Desplegar en Firebase Hosting
+      # Paso 3: Desplegar en Firebase Hosting
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
