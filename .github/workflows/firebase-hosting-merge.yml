@@ -13,7 +13,7 @@ jobs:
       # Paso 2: Cambiar al directorio 'multiplos' y ejecutar comandos
       - run: |
           cd multiplos
-          npm ci
+          npm ci --legacy-peer-deps
           npm run build
 
       # Paso 3: Desplegar en Firebase Hosting
