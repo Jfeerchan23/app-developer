@@ -75,7 +75,6 @@ private addMultiples(num: number): void {
   }
 }
 
-
 // Devuelve el color según el divisor del número
 private getColorByPriority(num: number): string {
   if (num === 0) return 'black'; // Color negro para el número 0
@@ -89,8 +88,6 @@ private getColorByPriority(num: number): string {
 
   return 'black'; // Si no es divisible, devuelve negro
 }
-
-  
 
 /*Objeto que se va guardar en la base de datos.
   Crea el resultado final con los múltiplos y los elementos. */
