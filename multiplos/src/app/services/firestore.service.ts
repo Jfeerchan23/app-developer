@@ -9,12 +9,12 @@ export class FirestoreService {
 
   constructor(private firestore: AngularFirestore) { }
 
+  // Guarda un item en un colección de Firestore
   async addItem(collectionName: string, result: Result): Promise<string> {
     try {
       await this.firestore.collection(collectionName).add(result);
       return 'Registro guardado correctamente.';
     } catch (error) {
-      console.error('Error al guardar el registro:', error);
       return 'Error al guardar el registro.';
     }
   }
