@@ -22,7 +22,7 @@ export class HomePage {
     7: 'blue',
   };
 
-  num: number = 0;
+  enteredNumber: number = 0;
   list: ValueColor[] = [];
   message: string = '';
 
@@ -33,14 +33,14 @@ export class HomePage {
 
   // Función que genera los números y los cálculos correspondientes
   async showNumbers(): Promise<void> {
-    const result: Result = this.generateElementsAndCalculate(this.num);
+    const result: Result = this.generateElementsAndCalculate(this.enteredNumber);
     // Guarda el resultado en Firestore
     this.message = await this.firestoreService.addItem('records', result);
   }
 
   // Función para reiniciar los valores
   deleteNumbers(): void {
-    this.num = 0;
+    this.enteredNumber = 0;
     this.list = [];
     this.message = '';
     this.multiplesMap = {}; 
