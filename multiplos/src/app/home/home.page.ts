@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonInput, IonCard, IonCardContent, IonCol, IonGrid, IonRow } from '@ionic/angular/standalone';
 import { IonButton } from '@ionic/angular/standalone';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ValueColor } from '../interfaces/color-value.interface';
 import { Result } from '../interfaces/result.interface';
+import { FirestoreService } from '../services/firestore.service';
 
 @Component({
   selector: 'app-home',
@@ -23,25 +23,24 @@ export class HomePage {
 
   num: number = 0;           // Número ingresado por el usuario
   list: ValueColor[] = [];      // Lista de elementos con colores
+  message: String = '';  //Mensaje de éxito o error cuando se guarda un registro
 
-  constructor(private firestore: AngularFirestore) {}
-
+  constructor(private firestoreService: FirestoreService) {}
 
   // Método principal para mostrar los números y calcular los múltiplos
-  showNumbers(): void {
+  async showNumbers(): Promise<void> {
     const result: Result = this.generateElementsAndCalculate(this.num);
-    console.log(result); // Resultado final para Firebase u otras operaciones
-    this.firestore.collection('records').add(result);
+    this.message = await this.firestoreService.addItem('records',result); 
   }
 
   deleteNumbers():void{
-    this.num = 0;           // Número ingresado por el usuario
+    this.num = 0;           
     this.list = [];
+    this.message='';
   }
 
   private generateElementsAndCalculate(limit: number): Result {
     const elements: ValueColor[] = [];
-    // Asegúrate de que las claves sean números (no cadenas) y que los valores sean arrays de números
     const multiples: { [key: number]: number[] } = this.initializeMultiples();
   
     for (let i = 0; i <= limit; i++) {
