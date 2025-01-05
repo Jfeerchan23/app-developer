@@ -6,6 +6,11 @@
   padding-top: 5%; /* Añade un espacio superior */
 }
 
+.buttons{
+  display: flex; /* Hace que los elementos hijos se alineen en una fila */
+  gap: 10px; /* Espacio entre los botones */
+}
+
 .description{
   color: #9efff0;
 }

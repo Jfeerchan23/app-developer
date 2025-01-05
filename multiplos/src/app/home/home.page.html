@@ -1,44 +1,41 @@
 <ion-content class="fondo">
 
-  
-
   <div class="centered">
     <div class="description">
       <h1>Prueba App Developer</h1>
       <p> Aplicación que recibe un parámetro y despliega los números que existan entre el 0 y el número ingresado.</p>
     </div>
 
-    <ion-input 
-    label="Ingresa un número" 
-    label-placement="floating" 
-    fill="solid" 
-    type="number" 
-    [min]="0"  
-    [(ngModel)]="num">
-  </ion-input>
-  
-  <ion-button 
-    (click)="showNumbers()" 
-    [disabled]="num < 0"> <!-- Deshabilita el botón si num es menor a 0 -->
-    Mostrar listado
-  </ion-button>
-  
+    <ion-input label="Ingresa un número" label-placement="floating" fill="solid" type="number" [min]="0"
+      [(ngModel)]="num">
+    </ion-input>
 
-  <ion-grid>
-    <ion-row>
-      <ng-container *ngFor="let item of list">
-        <ion-col size="3" size-md="1" size-lg="1">
-          <ion-card [style.background-color]="item.color" >
-            <ion-card-content class="center-content">
-              {{ item.value }}
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ng-container>
-    </ion-row>
-  </ion-grid>
+    <div class="buttons">
+      <ion-button (click)="showNumbers()" [disabled]="num < 0"> <!-- Deshabilita el botón si num es menor a 0 -->
+        Mostrar listado
+      </ion-button>
   
-    
-    
+      <ion-button (click)="deleteNumbers()" color="danger" [disabled]="num < 0"> <!-- Deshabilita el botón si num es menor a 0 -->
+        Borrar
+      </ion-button>
+  
+    </div>
+
+    <ion-grid>
+      <ion-row>
+        <ng-container *ngFor="let item of list">
+          <ion-col size="3" size-md="1" size-lg="1">
+            <ion-card [style.background-color]="item.color">
+              <ion-card-content class="center-content">
+                {{ item.value }}
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+
+
+
   </div>
 </ion-content>

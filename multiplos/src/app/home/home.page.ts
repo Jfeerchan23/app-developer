@@ -4,16 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonInput, IonCard, IonCardContent, IonCol, IonGrid, IonRow } from '@ionic/angular/standalone';
 import { IonButton } from '@ionic/angular/standalone';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-
-export interface element {
-  color: string;  // El color en formato hexadecimal, RGB, o nombre del color
-  value: number;  // El valor asociado al color
-}
-export interface Result {
-  number: number; // El número ingresado por el usuario
-  numbers: number[]; // Todos los números hasta el ingresado
-  multiples: { [key: number]: number[] }; // Múltiplos por divisor
-}
+import { ValueColor } from '../interfaces/color-value.interface';
+import { Result } from '../interfaces/result.interface';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +22,7 @@ export class HomePage {
   };
 
   num: number = 0;           // Número ingresado por el usuario
-  list: element[] = [];      // Lista de elementos con colores
+  list: ValueColor[] = [];      // Lista de elementos con colores
 
   constructor(private firestore: AngularFirestore) {}
 
@@ -39,18 +31,16 @@ export class HomePage {
   showNumbers(): void {
     const result: Result = this.generateElementsAndCalculate(this.num);
     console.log(result); // Resultado final para Firebase u otras operaciones
-    this.firestore.collection('records').add(result)
-    .then(() => {
-      console.log('Registro agregado correctamente');
-    })
-    .catch((error) => {
-      console.error('Error al agregar el número:', error);
-    });
+    this.firestore.collection('records').add(result);
+  }
 
+  deleteNumbers():void{
+    this.num = 0;           // Número ingresado por el usuario
+    this.list = [];
   }
 
   private generateElementsAndCalculate(limit: number): Result {
-    const elements: element[] = [];
+    const elements: ValueColor[] = [];
     // Asegúrate de que las claves sean números (no cadenas) y que los valores sean arrays de números
     const multiples: { [key: number]: number[] } = this.initializeMultiples();
   
@@ -104,11 +94,12 @@ private initializeMultiples(): { [key: number]: number[] } {
   }
 
   // Genera el objeto final de resultado con los números y sus múltiplos
-  private createResult(limit: number, elements: element[], multiples: { [key: number]: number[] }): Result {
+  private createResult(limit: number, elements: ValueColor[], multiples: { [key: number]: number[] }): Result {
     return {
       number: limit,
       numbers: elements.map((el) => el.value),
       multiples: multiples,
+      timestamp: new Date()
     };
   }
 }
