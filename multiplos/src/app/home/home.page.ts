@@ -7,6 +7,7 @@ import { ValueColor } from '../interfaces/color-value.interface';
 import { Result } from '../interfaces/result.interface';
 import { Multiple } from '../interfaces/multiple.interface';
 import { FirestoreService } from '../services/firestore.service';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-home',
@@ -100,7 +101,7 @@ private getColorByPriority(num: number): string {
 
   private createResult(limit: number, elements: ValueColor[]): Result {
     const multiplesArr: Multiple[] = [];
-    console.log(new Date())
+    
     for (const divisorNumber in this.multiplesMap) {
       multiplesArr.push({
         divisor: Number(divisorNumber),
@@ -112,7 +113,7 @@ private getColorByPriority(num: number): string {
       number: limit,
       numbers: elements.map((el) => el.value),
       multiples: multiplesArr,
-      timestamp: new Date(),
+      timestamp: DateTime.now().setZone('America/Mexico_City').toFormat('yyyy-MM-dd HH:mm:ss')
     };
   }
 }
