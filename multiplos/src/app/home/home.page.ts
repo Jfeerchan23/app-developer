@@ -27,7 +27,7 @@ export class HomePage {
   list: ValueColor[] = [];
   message: string = '';
 
-  // Mapa para almacenar los múltiplos por divisor
+  // Objeto para almacenar los múltiplos por divisor
   private multiplesMap: { [key: number]: number[] } = {};
 
   constructor(private firestoreService: FirestoreService) {}
@@ -98,10 +98,9 @@ private getColorByPriority(num: number): string {
 
 /*Objeto que se va guardar en la base de datos.
   Crea el resultado final con los múltiplos y los elementos. */
-
   private createResult(limit: number, elements: ValueColor[]): Result {
     const multiplesArr: Multiple[] = [];
-    
+
     for (const divisorNumber in this.multiplesMap) {
       multiplesArr.push({
         divisor: Number(divisorNumber),
