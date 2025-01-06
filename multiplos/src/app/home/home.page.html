@@ -1,28 +1,23 @@
 <ion-content class="fondo">
-
   <div class="centered">
     <div class="description">
       <h1>Prueba App Developer</h1>
       <p> Aplicación que recibe un parámetro y despliega los números que existan entre el 0 y el número ingresado.</p>
     </div>
-
-      <ion-input label="Ingresa un número" label-placement="floating" fill="solid" type="number" [min]="0"
+    <ion-input label="Ingresa un número" label-placement="floating" fill="solid" type="number" [min]="0"
       [(ngModel)]="enteredNumber">
     </ion-input>
     <div class="buttons">
-      <ion-button (click)="showNumbers()" [disabled]="enteredNumber < 0">
-        Generar listado
+      <ion-button (click)="showNumbers()" [disabled]="enteredNumber<0 || !isInteger(enteredNumber)">
+        Mostrar listado
       </ion-button>
-  
-      <ion-button (click)="deleteNumbers()" color="danger" > 
+      <ion-button (click)="deleteNumbers()" color="danger">
         Reiniciar valores
       </ion-button>
-  
     </div>
     <div class="message">
       {{message}}
     </div>
-    
     <ion-grid>
       <ion-row>
         <ng-container *ngFor="let item of list">
@@ -36,8 +31,5 @@
         </ng-container>
       </ion-row>
     </ion-grid>
-
-
-
   </div>
 </ion-content>

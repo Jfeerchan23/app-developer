@@ -31,6 +31,12 @@ export class HomePage {
 
   constructor(private firestoreService: FirestoreService) {}
 
+  //Verifica que el valor ingresado es un número entero
+  isInteger(value: any): boolean {
+    return Number.isInteger(Number(value));
+  }
+  
+
   // Función que genera los números y los cálculos correspondientes
   async showNumbers(): Promise<void> {
     const result: Result = this.generateElementsAndCalculate(this.enteredNumber);
