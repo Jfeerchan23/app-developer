@@ -100,7 +100,7 @@ private getColorByPriority(num: number): string {
 
   private createResult(limit: number, elements: ValueColor[]): Result {
     const multiplesArr: Multiple[] = [];
-
+    console.log(new Date())
     for (const divisorNumber in this.multiplesMap) {
       multiplesArr.push({
         divisor: Number(divisorNumber),
