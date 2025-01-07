@@ -1,14 +1,14 @@
 .centered {
   display: flex;
-  flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+  flex-direction: column; 
   justify-content: center;
-  align-items: center; /* Centra los elementos en el eje horizontal */
-  padding-top: 5%; /* Añade un espacio superior */
+  align-items: center; 
+  padding-top: 5%; 
 }
 
 .buttons{
-  display: flex; /* Hace que los elementos hijos se alineen en una fila */
-  gap: 10px; /* Espacio entre los botones */
+  display: flex; 
+  gap: 10px; 
 }
 
 .description{
@@ -32,11 +32,11 @@ ion-input{
 
 .center-content {
   display: flex;
-  align-items: center;  /* Centra verticalmente */
-  justify-content: center;  /* Centra horizontalmente */
-  height: 100%;  /* Asegura que la tarjeta ocupe toda la altura */
-  font-size: 1.5rem;  /* Puedes ajustar el tamaño del texto según tus necesidades */
-  text-align: center;  /* Asegura que el texto esté centrado */
+  align-items: center; 
+  justify-content: center;  
+  height: 100%; 
+  font-size: 1.5rem;  
+  text-align: center;  
   color: white;
 }
 
